@@ -14,6 +14,11 @@ func (r *TodoRepo) FindAll() (todos []model.Todo, err error) {
 	return
 }
 
+func (r *TodoRepo) Create(todo model.Todo) (err error) {
+	err = r.db.Create(&todo).Error
+	return
+}
+
 func NewTodoRepo(db *gorm.DB) *TodoRepo {
 	return &TodoRepo{
 		db: db,

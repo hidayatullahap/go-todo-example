@@ -17,14 +17,22 @@ func main() {
 	}
 
 	e := echo.New()
-
-	// Middleware
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-
-	// Routes
-	e.GET("/", action.Hello)
+	addMiddleware(e)
+	addRoutes(e)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":" + os.Getenv("app_port")))
+}
+
+func addMiddleware(e *echo.Echo) {
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+}
+
+func addRoutes(e *echo.Echo) {
+	todoAction := action.NewTodo()
+
+	e.GET("/", action.Hello)
+	e.GET("/todos", todoAction.FindTodoList)
 }

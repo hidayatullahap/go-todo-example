@@ -1,0 +1,1 @@
+CREATE DATABASE medium_todo;

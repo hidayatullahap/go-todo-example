@@ -5,6 +5,7 @@ Perquisite
 Tool used
 - Table Plus and valentina studio
 - GoLand
+- Insomnia
 
 Feature
 - Can create todo
@@ -71,4 +72,14 @@ CREATE TABLE `todo_tags` (
 -- -------------------------------------------------------------
 
 INSERT INTO `todo_tags`(`todo_id`,`tag_id`) VALUES (1,1);
+```
+
+6. add dotenv for configs
+library for load env variables
+```
+$ go get github.com/joho/godotenv
+```
+get echo library for http server
+```
+$ go get github.com/labstack/echo/v4
 ```

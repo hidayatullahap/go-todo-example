@@ -4,19 +4,27 @@ import (
 	"net/http"
 
 	"github.com/hidayatullahap/go-todo-example/core"
+	"github.com/hidayatullahap/go-todo-example/repo"
 	"github.com/labstack/echo/v4"
 )
 
 type Todo struct {
-	env *core.Env
+	env      *core.Env
+	todoRepo *repo.TodoRepo
 }
 
 func (a *Todo) FindTodoList(c echo.Context) error {
-	return c.String(http.StatusOK, "Todo list goes here")
+	list, err := a.todoRepo.FindAll()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	return c.JSON(http.StatusOK, list)
 }
 
 func NewTodo(env *core.Env) *Todo {
 	return &Todo{
-		env: env,
+		env:      env,
+		todoRepo: repo.NewTodoRepo(env.Db),
 	}
 }

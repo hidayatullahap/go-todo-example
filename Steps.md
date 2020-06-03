@@ -86,4 +86,5 @@ $ go get github.com/labstack/echo/v4
 
 7. add hello world server
 8. move hello func to action folder
-9. add show todo list
+9. create mysql connection and app env
+9. show todo list with created repo

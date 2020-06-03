@@ -11,26 +11,39 @@ import (
 )
 
 func (a *Todo) CreateTodo(c echo.Context) error {
+	todo, err := a.getCreateTodoRequest(c)
+	if err != nil {
+		return errors.BadRequest(c, err)
+	}
+
+	err = a.todoRepo.Create(todo)
+	if err != nil {
+		return errors.BadRequest(c, err)
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Todo successfully created"})
+}
+
+func (a *Todo) getCreateTodoRequest(c echo.Context) (model.Todo, error) {
 	req := new(request.TodoCreateRequest)
+	todo := model.Todo{}
 
 	err := c.Bind(req)
 	if err != nil {
-		return err
+		return todo, err
 	}
 
-	todo := model.Todo{
-		Message: req.Message,
-		Note:    req.Note,
-	}
+	todo.Message = req.Message
+	todo.Note = req.Note
 
 	if req.CustomDate != nil {
 		customDate, err := core.FormatDate(*req.CustomDate)
 		if err != nil {
-			return errors.BadRequest(c, err)
+			return todo, err
 		}
 
 		todo.CustomDate = &customDate
 	}
 
-	return c.String(http.StatusOK, "Create Todo endpoint")
+	return todo, err
 }

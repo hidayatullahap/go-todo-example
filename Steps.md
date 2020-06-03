@@ -88,4 +88,5 @@ $ go get github.com/labstack/echo/v4
 8. move hello func to action folder
 9. create mysql connection and app env
 10. show todo list with created repo
-11. endpoint create todo
+11. Read todo request to insert into db
+12. create repo for create todo

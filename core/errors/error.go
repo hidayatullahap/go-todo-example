@@ -11,5 +11,5 @@ func ErrorFormat(err error) map[string]string {
 }
 
 func BadRequest(c echo.Context, err error) error {
-	return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	return c.JSON(http.StatusBadRequest, ErrorFormat(err))
 }

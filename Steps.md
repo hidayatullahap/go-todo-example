@@ -83,3 +83,6 @@ get echo library for http server
 ```
 $ go get github.com/labstack/echo/v4
 ```
+
+7. add hello world server
+8. move hello func to action folder

@@ -11,7 +11,7 @@ import (
 )
 
 func (a *Todo) CreateTodo(c echo.Context) error {
-	todo, err := a.getCreateTodoRequest(c)
+	todo, err := a.getTodoModelCreate(c)
 	if err != nil {
 		return errors.BadRequest(c, err)
 	}
@@ -24,7 +24,7 @@ func (a *Todo) CreateTodo(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{"message": "Todo successfully created"})
 }
 
-func (a *Todo) getCreateTodoRequest(c echo.Context) (model.Todo, error) {
+func (a *Todo) getTodoModelCreate(c echo.Context) (model.Todo, error) {
 	req := new(request.TodoCreateRequest)
 	todo := model.Todo{}
 

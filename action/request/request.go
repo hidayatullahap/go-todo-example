@@ -1,7 +1,7 @@
 package request
 
 type TodoCreateRequest struct {
-	Message    string  `json:"message"`
+	Message    string  `json:"message" validate:"required"`
 	Note       *string `json:"note"`
 	CustomDate *string `json:"custom_date"`
 }

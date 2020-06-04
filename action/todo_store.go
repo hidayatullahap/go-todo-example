@@ -49,6 +49,11 @@ func (a *Todo) buildTodoModel(c echo.Context) (model.Todo, error) {
 		return todo, err
 	}
 
+	err = c.Validate(req)
+	if err != nil {
+		return todo, err
+	}
+
 	todo.Message = req.Message
 	todo.Note = req.Note
 

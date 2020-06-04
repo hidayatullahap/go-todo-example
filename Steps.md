@@ -91,3 +91,5 @@ $ go get github.com/labstack/echo/v4
 11. Read todo request to insert into db
 12. create repo for create todo -> e08d069
 13. refactor todo find bad request error
+14. add todo detail
+15. 

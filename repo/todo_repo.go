@@ -14,6 +14,11 @@ func (r *TodoRepo) FindAll() (todos []model.Todo, err error) {
 	return
 }
 
+func (r *TodoRepo) FindOne(id string) (todo model.Todo, err error) {
+	err = r.db.Where("id = ?", id).First(&todo).Error
+	return
+}
+
 func (r *TodoRepo) Create(todo model.Todo) (err error) {
 	err = r.db.Create(&todo).Error
 	return

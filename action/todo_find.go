@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (a *Todo) FindTodoList(c echo.Context) error {
+func (a *Todo) FindList(c echo.Context) error {
 	list, err := a.todoRepo.FindAll()
 	if err != nil {
 		return errors.BadRequest(c, err)
@@ -16,7 +16,7 @@ func (a *Todo) FindTodoList(c echo.Context) error {
 	return c.JSON(http.StatusOK, list)
 }
 
-func (a *Todo) FindTodoDetail(c echo.Context) error {
+func (a *Todo) FindDetail(c echo.Context) error {
 	id := c.Param("id")
 
 	detail, err := a.todoRepo.FindOne(id)

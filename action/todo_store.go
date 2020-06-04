@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (a *Todo) CreateTodo(c echo.Context) error {
+func (a *Todo) Create(c echo.Context) error {
 	todo, err := a.getTodoModelCreate(c)
 	if err != nil {
 		return errors.BadRequest(c, err)
@@ -22,6 +22,11 @@ func (a *Todo) CreateTodo(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Todo successfully created"})
+}
+
+func (a *Todo) Update(c echo.Context) error {
+	// TODO: implement
+	return c.JSON(http.StatusOK, "TODO")
 }
 
 func (a *Todo) getTodoModelCreate(c echo.Context) (model.Todo, error) {

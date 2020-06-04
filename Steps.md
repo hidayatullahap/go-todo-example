@@ -107,3 +107,5 @@ CREATE INDEX `i_tag_todos_tag_id` ON `todo_tags` (`todo_id`);
 21. read tag array request
 22. create tags builder
 23. TodoTags gorm:"-" on create, change create todo repo with tx
+24. show detail todo with tag relationship, add omitempty in tags_json (dont give space after "," it will not work)
+25. 

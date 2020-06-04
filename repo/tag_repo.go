@@ -19,6 +19,14 @@ func (r *TagRepo) FindOne(id string) (tag model.Tag, err error) {
 	return
 }
 
+func (r *TagRepo) FindTagsIn(tagIDs []string) (tags []model.Tag, err error) {
+	if len(tagIDs) > 0 {
+		err = r.db.Where("id IN (?)", tagIDs).Find(&tags).Error
+	}
+
+	return
+}
+
 func (r *TagRepo) Create(tag model.Tag) (err error) {
 	err = r.db.Create(&tag).Error
 	return

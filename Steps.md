@@ -89,4 +89,5 @@ $ go get github.com/labstack/echo/v4
 9. create mysql connection and app env
 10. show todo list with created repo
 11. Read todo request to insert into db
-12. create repo for create todo
+12. create repo for create todo -> e08d069
+13. refactor todo find bad request error

@@ -38,9 +38,10 @@ func addRoutes(e *echo.Echo, env core.Env) {
 	todoAction := action.NewTodo(&env)
 
 	e.GET("/", action.Hello)
-	e.GET("/todos", todoAction.FindTodoList)
-	e.GET("/todos/:id", todoAction.FindTodoDetail)
-	e.POST("/todos", todoAction.CreateTodo)
+	e.GET("/todos", todoAction.FindList)
+	e.GET("/todos/:id", todoAction.FindDetail)
+	e.POST("/todos", todoAction.Create)
+	e.PUT("/todos/:id", todoAction.Update)
 }
 
 func getEnv() core.Env {

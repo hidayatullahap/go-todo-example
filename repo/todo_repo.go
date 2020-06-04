@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"log"
+
 	"github.com/hidayatullahap/go-todo-example/model"
 	"github.com/jinzhu/gorm"
 )
@@ -20,7 +22,31 @@ func (r *TodoRepo) FindOne(id string) (todo model.Todo, err error) {
 }
 
 func (r *TodoRepo) Create(todo model.Todo) (err error) {
-	err = r.db.Create(&todo).Error
+	r.db.LogMode(true)
+	tx := r.db.Begin()
+
+	err = tx.Create(&todo).Error
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+
+	if todo.TodoTags != nil {
+		for _, tag := range *todo.TodoTags {
+			todoID := todo.ID
+			tag.TodoID = todoID
+
+			log.Println(tag)
+
+			err = tx.Create(&tag).Error
+			if err != nil {
+				tx.Rollback()
+				return
+			}
+		}
+	}
+
+	tx.Commit()
 	return
 }
 

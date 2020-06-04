@@ -98,3 +98,12 @@ $ go get github.com/labstack/echo/v4
 18. create custom validator message
 19. add todo store validator
 20. create custom error message
+21. add index in todo_tags 
+```
+-- CREATE INDEX "i_tag_todos_tag_id" ---------------------------
+CREATE INDEX `i_tag_todos_tag_id` ON `todo_tags` (`todo_id`);
+-- -------------------------------------------------------------
+```
+21. read tag array request
+22. create tags builder
+23. TodoTags gorm:"-" on create, change create todo repo with tx

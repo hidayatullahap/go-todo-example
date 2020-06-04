@@ -66,5 +66,23 @@ func (a *Todo) buildTodoModel(c echo.Context) (model.Todo, error) {
 		todo.CustomDate = &customDate
 	}
 
+	if req.Tags != nil {
+		tags := buildTodoTagsModel(c, req)
+		todo.TodoTags = &tags
+	}
+
 	return todo, err
+}
+
+func buildTodoTagsModel(c echo.Context, req *request.TodoCreateRequest) []model.TodoTag {
+	var tags []model.TodoTag
+	for _, tagID := range *req.Tags {
+		tag := model.TodoTag{
+			TagID: tagID,
+		}
+
+		tags = append(tags, tag)
+	}
+
+	return tags
 }

@@ -5,3 +5,7 @@ type TodoCreateRequest struct {
 	Note       *string `json:"note"`
 	CustomDate *string `json:"custom_date"`
 }
+
+type TagCreateRequest struct {
+	Name string `json:"name" validate:"required"`
+}

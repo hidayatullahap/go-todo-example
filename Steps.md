@@ -94,3 +94,5 @@ $ go get github.com/labstack/echo/v4
 14. add todo detail
 15. refactor before update endpoint
 16. add update endpoint
+17. add crud tags and validator
+18. create custom validator message

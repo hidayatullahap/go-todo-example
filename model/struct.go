@@ -13,7 +13,7 @@ type Todo struct {
 	UpdatedAt  *time.Time `gorm:"column:updated_at" json:"updated_at"`
 }
 
-type Tags struct {
+type Tag struct {
 	ID        int32      `gorm:"column:id" json:"id"`
 	Name      string     `gorm:"column:name" json:"name"`
 	CreatedAt *time.Time `gorm:"column:created_at" json:"created_at"`

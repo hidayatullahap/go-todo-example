@@ -97,3 +97,4 @@ $ go get github.com/labstack/echo/v4
 17. add crud tags and validator
 18. create custom validator message
 19. add todo store validator
+20. create custom error message

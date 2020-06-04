@@ -45,7 +45,7 @@ func (a *Tag) buildTagModel(c echo.Context) (model.Tag, error) {
 
 	err := c.Bind(req)
 	if err != nil {
-		return tag, err
+		return tag, errors.NewErrorBind(err)
 	}
 
 	err = c.Validate(req)

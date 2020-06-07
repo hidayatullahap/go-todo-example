@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/hidayatullahap/go-todo-example/action"
-	"github.com/hidayatullahap/go-todo-example/action/request"
 	"github.com/hidayatullahap/go-todo-example/core"
 	"github.com/hidayatullahap/go-todo-example/database"
 	"github.com/joho/godotenv"
@@ -33,7 +32,7 @@ func addMiddleware(e *echo.Echo) {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Validator = request.NewCustomValidator()
+	e.Validator = core.NewCustomValidator()
 }
 
 func addRoutes(e *echo.Echo, app core.App) {

@@ -67,14 +67,14 @@ func (a *Todo) buildTodoModel(c echo.Context) (model.Todo, error) {
 	}
 
 	if req.Tags != nil {
-		tags := buildTodoTagsModel(c, req)
+		tags := buildTodoTagsModel(req)
 		todo.TodoTags = &tags
 	}
 
 	return todo, err
 }
 
-func buildTodoTagsModel(c echo.Context, req *request.TodoCreateRequest) []model.TodoTag {
+func buildTodoTagsModel(req *request.TodoCreateRequest) []model.TodoTag {
 	var tags []model.TodoTag
 	for _, tagID := range *req.Tags {
 		tag := model.TodoTag{

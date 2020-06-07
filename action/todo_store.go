@@ -21,7 +21,7 @@ func (a *Todo) Create(c echo.Context) error {
 		return errors.BadRequest(c, err)
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"message": "Todo successfully created"})
+	return c.JSON(http.StatusCreated, map[string]string{"message": "Todo successfully created"})
 }
 
 func (a *Todo) Update(c echo.Context) error {

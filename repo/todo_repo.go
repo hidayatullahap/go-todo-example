@@ -1,6 +1,9 @@
 package repo
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/hidayatullahap/go-todo-example/core"
 	"github.com/hidayatullahap/go-todo-example/model"
 	"github.com/jinzhu/gorm"
@@ -86,14 +89,63 @@ func (r *TodoRepo) Create(todo model.Todo) (err error) {
 	return
 }
 
-// Using map for update nil values, struct will skip those values
-func (r *TodoRepo) Update(id string, todo model.Todo) (err error) {
+// Using map for update nil/non-zero values, gorm will skip those values
+func (r *TodoRepo) Update(todoID string, todo model.Todo) (err error) {
 	updateField := map[string]interface{}{
 		"message":     todo.Message,
 		"note":        todo.Note,
 		"custom_date": todo.CustomDate}
 
-	err = r.db.Model(&todo).Where("id = ?", id).Updates(updateField).Error
+	tx := r.db.Begin()
+	err = tx.Model(&todo).Where("id = ?", todoID).Updates(updateField).Error
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+
+	if todo.TodoTags != nil {
+		err = r.UpdateTodoTags(tx, todoID, *todo.TodoTags)
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+	}
+
+	tx.Commit()
+	return
+}
+
+// Update many-to-many relationship; upsert tags then delete unrelated tags id(s)
+// example sql:
+// INSERT IGNORE INTO `todo_tags` ( `todo_id`, `tag_id`) VALUES ( 1, 1 ), (1, 5), (1, 6);
+// DELETE a FROM todo_tags a inner join todo_tags b ON a.id = b.id AND a.todo_id = 1 AND a.tag_id NOT IN (1,5,6);
+func (r *TodoRepo) UpdateTodoTags(tx *gorm.DB, todoID string, tags []model.TodoTag) (err error) {
+	if len(tags) == 0 {
+		return
+	}
+
+	var tagIds []string
+	for _, tag := range tags {
+		tagIds = append(tagIds, core.Int32ToString(tag.TagID))
+	}
+
+	var todoTagIds []string
+	for _, tagID := range tagIds {
+		todoTagIds = append(todoTagIds, fmt.Sprintf("( %s,%s )", todoID, tagID))
+	}
+
+	insertValues := strings.Join(todoTagIds, ",")
+
+	err = tx.Exec(`INSERT IGNORE INTO todo_tags ( todo_id, tag_id) VALUES ` + insertValues).Error
+	if err != nil {
+		return
+	}
+
+	err = tx.Exec(`DELETE a FROM todo_tags a inner join todo_tags b ON a.id = b.id AND a.todo_id = (?) AND a.tag_id NOT IN (?)`, todoID, tagIds).Error
+	if err != nil {
+		return
+	}
+
 	return
 }
 

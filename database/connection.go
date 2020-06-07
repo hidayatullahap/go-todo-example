@@ -10,14 +10,14 @@ import (
 )
 
 func GetMysqlConnection() *gorm.DB {
-	usernameAndPassword := fmt.Sprint(os.Getenv("db_user")) + ":" + fmt.Sprint(os.Getenv("db_password"))
-	hostName := "tcp(" + fmt.Sprint(os.Getenv("db_host")) + ":" + fmt.Sprint(os.Getenv("db_port")) + ")"
+	usernameAndPassword := fmt.Sprintf("%s:%s", os.Getenv("db_user"), os.Getenv("db_password"))
+	hostName := fmt.Sprintf("tcp(%s:%s)", os.Getenv("db_host"), os.Getenv("db_port"))
+	urlConnection := fmt.Sprintf("%s@%s/%s?charset=utf8&parseTime=true&loc=UTC", usernameAndPassword, hostName, os.Getenv("db_database"))
 
-	log.Println("Connecting to DB Server " + fmt.Sprint(os.Getenv("db_host")) + ":" + fmt.Sprint(os.Getenv("db_port")) + "...")
-	urlConnection := usernameAndPassword + "@" + hostName + "/" + fmt.Sprint(os.Getenv("db_database")) + "?charset=utf8&parseTime=true&loc=UTC"
-
+	log.Println(fmt.Sprintf("Connecting to DB Server %s:%s/%s...", os.Getenv("db_host"), os.Getenv("db_port"), os.Getenv("db_database")))
 	db, err := gorm.Open("mysql", urlConnection)
 	if err != nil {
+		log.Println("DB Server failed to connect")
 		panic(err)
 	}
 

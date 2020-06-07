@@ -6,13 +6,13 @@ import (
 )
 
 type Tag struct {
-	env     *core.Env
+	app     *core.App
 	tagRepo *repo.TagRepo
 }
 
-func NewTag(env *core.Env) *Tag {
+func NewTag(app *core.App) *Tag {
 	return &Tag{
-		env:     env,
-		tagRepo: repo.NewTagRepo(env.Db),
+		app:     app,
+		tagRepo: repo.NewTagRepo(app.Db),
 	}
 }

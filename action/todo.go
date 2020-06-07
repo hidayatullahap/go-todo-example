@@ -6,13 +6,13 @@ import (
 )
 
 type Todo struct {
-	env      *core.Env
+	app      *core.App
 	todoRepo *repo.TodoRepo
 }
 
-func NewTodo(env *core.Env) *Todo {
+func NewTodo(app *core.App) *Todo {
 	return &Todo{
-		env:      env,
-		todoRepo: repo.NewTodoRepo(env.Db),
+		app:      app,
+		todoRepo: repo.NewTodoRepo(app.Db),
 	}
 }

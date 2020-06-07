@@ -19,11 +19,11 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	env := getEnv()
+	app := initApp()
 
 	e := echo.New()
 	addMiddleware(e)
-	addRoutes(e, env)
+	addRoutes(e, app)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":" + os.Getenv("app_port")))
@@ -36,9 +36,9 @@ func addMiddleware(e *echo.Echo) {
 	e.Validator = request.NewCustomValidator()
 }
 
-func addRoutes(e *echo.Echo, env core.Env) {
-	todoAction := action.NewTodo(&env)
-	tagAction := action.NewTag(&env)
+func addRoutes(e *echo.Echo, app core.App) {
+	todoAction := action.NewTodo(&app)
+	tagAction := action.NewTag(&app)
 
 	e.GET("/", action.Hello)
 
@@ -53,10 +53,10 @@ func addRoutes(e *echo.Echo, env core.Env) {
 	e.PUT("/tags/:id", tagAction.Update)
 }
 
-func getEnv() core.Env {
+func initApp() core.App {
 	mysqlCon := database.GetMysqlConnection()
 
-	return core.Env{
+	return core.App{
 		Db: mysqlCon,
 	}
 }

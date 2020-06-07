@@ -7,6 +7,7 @@ import (
 	"github.com/hidayatullahap/go-todo-example/core"
 	"github.com/hidayatullahap/go-todo-example/model"
 	"github.com/jinzhu/gorm"
+	col "github.com/thoas/go-funk"
 )
 
 type TodoRepo struct {
@@ -15,6 +16,15 @@ type TodoRepo struct {
 
 func (r *TodoRepo) FindAll() (todos []model.Todo, err error) {
 	err = r.db.Find(&todos).Error
+	if err != nil {
+		return
+	}
+
+	err = r.MapTagsToTodo(&todos)
+	if err != nil {
+		return
+	}
+
 	return
 }
 
@@ -24,15 +34,27 @@ func (r *TodoRepo) FindOne(id string) (todo model.Todo, err error) {
 		return
 	}
 
-	// Populate tag ids in todo_tags
-	todoTags, err := r.FindTodoTags(id)
+	// find many-to-many tag relation
+	tags, err := r.FindTodoTags(id)
 	if err != nil {
 		return
 	}
 
+	todo.Tags = &tags
+	return
+}
+
+func (r *TodoRepo) FindTodoTags(todoID string) ([]model.Tag, error) {
+	var todoTags []model.TodoTag
+	var tags []model.Tag
+
+	err := r.db.Where("todo_id = ?", todoID).Find(&todoTags).Error
+	if err != nil {
+		return tags, err
+	}
+
 	tagIds := r.PluckTodoTagsId(todoTags)
 
-	var tags []model.Tag
 	if len(todoTags) > 0 {
 		tagRepo := NewTagRepo(r.db)
 
@@ -41,18 +63,7 @@ func (r *TodoRepo) FindOne(id string) (todo model.Todo, err error) {
 		tags = tagsFind
 	}
 
-	todo.Tags = &tags
-	return
-}
-
-func (r *TodoRepo) FindTodoTags(todoID string) ([]model.TodoTag, error) {
-	var todoTags []model.TodoTag
-	err := r.db.Where("todo_id = ?", todoID).Find(&todoTags).Error
-	if err != nil {
-		return todoTags, err
-	}
-
-	return todoTags, nil
+	return tags, nil
 }
 
 func (r *TodoRepo) PluckTodoTagsId(todoTags []model.TodoTag) (ids []string) {
@@ -144,6 +155,61 @@ func (r *TodoRepo) UpdateTodoTags(tx *gorm.DB, todoID string, tags []model.TodoT
 	err = tx.Exec(`DELETE a FROM todo_tags a inner join todo_tags b ON a.id = b.id AND a.todo_id = (?) AND a.tag_id NOT IN (?)`, todoID, tagIds).Error
 	if err != nil {
 		return
+	}
+
+	return
+}
+
+func (r *TodoRepo) MapTagsToTodo(todos *[]model.Todo) (err error) {
+	if todos == nil {
+		return
+	}
+
+	var todoIds []int32
+	for _, todo := range *todos {
+		todoIds = append(todoIds, todo.ID)
+	}
+
+	// get tag ids then map it into todos
+	var todoTags []model.TodoTag
+	var tagIds []int32
+	err = r.db.Where(" tag_id IN (?)", todoIds).Find(&todoTags).Error
+	if err != nil {
+		return
+	}
+
+	for _, todoTag := range todoTags {
+		tagIds = append(tagIds, todoTag.TagID)
+	}
+
+	tagIds = col.UniqInt32(tagIds)
+
+	var tags []model.Tag
+	err = r.db.Where("id IN (?)", tagIds).Find(&tags).Error
+	if err != nil {
+		return
+	}
+
+	// map key for tag_id
+	var mapTag = make(map[int32]model.Tag)
+	for _, tag := range tags {
+		mapTag[tag.ID] = tag
+	}
+
+	// map tags to todo
+	mapTodos := *todos
+	for i, todo := range mapTodos {
+		var tmpTags []model.Tag
+		mapTodos[i].Tags = &tmpTags
+
+		// search tag_id key in todo_tags from map tag
+		for _, todoTag := range todoTags {
+			if todo.ID == todoTag.TodoID {
+				if tag, ok := mapTag[todoTag.TagID]; ok {
+					tmpTags = append(tmpTags, tag)
+				}
+			}
+		}
 	}
 
 	return

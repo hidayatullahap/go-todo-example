@@ -9,5 +9,6 @@ require (
 	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/labstack/echo/v4 v4.1.16
 	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/thoas/go-funk v0.6.0
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 )

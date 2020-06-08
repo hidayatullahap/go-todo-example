@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/hidayatullahap/go-todo-example/action"
 	"github.com/hidayatullahap/go-todo-example/core"
@@ -54,6 +55,10 @@ func addRoutes(e *echo.Echo, app core.App) {
 
 func initApp() core.App {
 	mysqlCon := database.GetMysqlConnection()
+	debugIsActive, _ := strconv.ParseBool(os.Getenv("db_debug"))
+	if debugIsActive {
+		mysqlCon.LogMode(true)
+	}
 
 	return core.App{
 		Db: mysqlCon,

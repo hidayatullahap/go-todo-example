@@ -1,5 +1,7 @@
 package request
 
+// Example for using other validator rule
+// `json:"value" validate:"min=1,max=10,required"`
 type TodoCreateRequest struct {
 	Message string   `json:"message" validate:"required"`
 	Note    *string  `json:"note"`

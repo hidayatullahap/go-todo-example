@@ -6,6 +6,7 @@ import (
 	stdErr "errors"
 
 	"github.com/hidayatullahap/go-todo-example/action/request"
+	"github.com/hidayatullahap/go-todo-example/core"
 	"github.com/hidayatullahap/go-todo-example/core/errors"
 	"github.com/hidayatullahap/go-todo-example/model"
 	"github.com/labstack/echo/v4"
@@ -49,12 +50,7 @@ func (a *Todo) buildTodoModel(c echo.Context) (model.Todo, error) {
 	req := new(request.TodoCreateRequest)
 	todo := model.Todo{}
 
-	err := c.Bind(req)
-	if err != nil {
-		return todo, err
-	}
-
-	err = c.Validate(req)
+	err := core.BindValidate(c, req)
 	if err != nil {
 		return todo, err
 	}

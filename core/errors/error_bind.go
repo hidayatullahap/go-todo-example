@@ -76,17 +76,6 @@ func (b BindError) ToString() string {
 	return message
 }
 
-func NewErrorBind(err error) error {
-	if httpErr, ok := err.(*echo.HTTPError); ok {
-		bindErr, errConvert := ConvertHttpErrorToBindError(httpErr)
-		if errConvert == nil {
-			err = errors.New(bindErr.ToString())
-		}
-	}
-
-	return err
-}
-
 func ConvertHttpErrorToBindError(httpErr *echo.HTTPError) (*BindError, error) {
 	var bindErr BindError
 	var httpErrMessage string
@@ -131,4 +120,15 @@ func ConvertHttpErrorToBindError(httpErr *echo.HTTPError) (*BindError, error) {
 	}
 
 	return &bindErr, nil
+}
+
+func NewErrorBind(err error) error {
+	if httpErr, ok := err.(*echo.HTTPError); ok {
+		bindErr, errConvert := ConvertHttpErrorToBindError(httpErr)
+		if errConvert == nil {
+			err = errors.New(bindErr.ToString())
+		}
+	}
+
+	return err
 }

@@ -44,7 +44,7 @@ func (b BindErrorType) GetType(s string) BindErrorType {
 	return errType
 }
 
-func (b BindErrorType) IsProperType() bool {
+func (b BindErrorType) IsDefined() bool {
 	if b == ErrTypeUndefined {
 		return false
 	}
@@ -88,7 +88,7 @@ func ConvertHttpErrorToBindError(httpErr *echo.HTTPError) (*BindError, error) {
 
 	bindErr.Type = bindErr.Type.GetType(httpErrMessage)
 
-	if !bindErr.Type.IsProperType() {
+	if !bindErr.Type.IsDefined() {
 		return nil, errors.New("cannot convert to BindError")
 	}
 

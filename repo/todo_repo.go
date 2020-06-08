@@ -172,7 +172,7 @@ func (r *TodoRepo) MapTagsToTodo(todos *[]model.Todo) (err error) {
 	// get tag ids then map it into todos
 	var todoTags []model.TodoTag
 	var tagIds []int32
-	err = r.db.Where(" tag_id IN (?)", todoIds).Find(&todoTags).Error
+	err = r.db.Where(" todo_id IN (?)", todoIds).Find(&todoTags).Error
 	if err != nil {
 		return
 	}

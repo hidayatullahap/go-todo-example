@@ -1,6 +1,7 @@
 package action
 
 import (
+	stdErr "errors"
 	"net/http"
 
 	"github.com/hidayatullahap/go-todo-example/action/request"
@@ -25,6 +26,10 @@ func (a *Tag) Create(c echo.Context) error {
 
 func (a *Tag) Update(c echo.Context) error {
 	id := c.Param("id")
+
+	if !a.isExist(id) {
+		return errors.NotFound(c, stdErr.New("tag not found"))
+	}
 
 	todo, err := a.buildTagModel(c)
 	if err != nil {

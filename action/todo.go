@@ -10,6 +10,15 @@ type Todo struct {
 	todoRepo *repo.TodoRepo
 }
 
+func (a *Todo) isExist(id string) bool {
+	_, err := a.todoRepo.FindOne(id)
+	if err != nil {
+		return false
+	}
+
+	return true
+}
+
 func NewTodo(app *core.App) *Todo {
 	return &Todo{
 		app:      app,

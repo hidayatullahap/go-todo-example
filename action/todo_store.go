@@ -3,6 +3,8 @@ package action
 import (
 	"net/http"
 
+	stdErr "errors"
+
 	"github.com/hidayatullahap/go-todo-example/action/request"
 	"github.com/hidayatullahap/go-todo-example/core"
 	"github.com/hidayatullahap/go-todo-example/core/errors"
@@ -26,6 +28,10 @@ func (a *Todo) Create(c echo.Context) error {
 
 func (a *Todo) Update(c echo.Context) error {
 	id := c.Param("id")
+
+	if !a.isExist(id) {
+		return errors.NotFound(c, stdErr.New("todo not found"))
+	}
 
 	todo, err := a.buildTodoModel(c)
 	if err != nil {

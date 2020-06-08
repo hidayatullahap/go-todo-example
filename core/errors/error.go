@@ -13,3 +13,7 @@ func ErrorFormat(err error) map[string]string {
 func BadRequest(c echo.Context, err error) error {
 	return c.JSON(http.StatusBadRequest, ErrorFormat(err))
 }
+
+func NotFound(c echo.Context, err error) error {
+	return c.JSON(http.StatusNotFound, ErrorFormat(err))
+}

@@ -46,6 +46,7 @@ func addRoutes(e *echo.Echo, app core.App) {
 	e.GET("/todos/:id", todoAction.FindDetail)
 	e.POST("/todos", todoAction.Create)
 	e.PUT("/todos/:id", todoAction.Update)
+	e.PATCH("/todos/:id", todoAction.UpdateStatus)
 
 	e.GET("/tags", tagAction.FindList)
 	e.GET("/tags/:id", tagAction.FindDetail)

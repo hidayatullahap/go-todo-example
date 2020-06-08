@@ -2,6 +2,7 @@ package action
 
 import (
 	"net/http"
+	"strconv"
 
 	stdErr "errors"
 
@@ -41,4 +42,29 @@ func (a *Todo) Update(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Todo successfully updated"})
+}
+
+func (a *Todo) UpdateStatus(c echo.Context) error {
+	id := c.Param("id")
+	param := c.QueryParam("is_done")
+
+	if len(param) == 0 {
+		return c.JSON(http.StatusOK, map[string]string{"message": "ok"})
+	}
+
+	isDone, err := strconv.ParseBool(param)
+	if err != nil {
+		return errors.BadRequest(c, stdErr.New("param only accepts 1, t, T, TRUE, true, True, 0, f, F, FALSE, false, False"))
+	}
+
+	if !a.isExist(id) {
+		return errors.NotFound(c, stdErr.New("todo not found"))
+	}
+
+	err = a.todoRepo.UpdateStatus(id, isDone)
+	if err != nil {
+		return errors.BadRequest(c, err)
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Todo update status success"})
 }

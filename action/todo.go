@@ -11,7 +11,7 @@ type Todo struct {
 }
 
 func (a *Todo) isExist(id string) bool {
-	_, err := a.todoRepo.FindOne(id)
+	_, err := a.todoRepo.FindOne(id, false)
 	if err != nil {
 		return false
 	}

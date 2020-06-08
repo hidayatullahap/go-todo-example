@@ -28,19 +28,28 @@ func (r *TodoRepo) FindAll() (todos []model.Todo, err error) {
 	return
 }
 
-func (r *TodoRepo) FindOne(id string) (todo model.Todo, err error) {
+func (r *TodoRepo) FindOne(id string, withRelation ...bool) (todo model.Todo, err error) {
 	err = r.db.Where("id = ?", id).First(&todo).Error
 	if err != nil {
 		return
 	}
 
-	// find many-to-many tag relation
-	tags, err := r.FindTodoTags(id)
-	if err != nil {
-		return
+	loadRelation := true
+	if len(withRelation) > 0 {
+		loadRelation = withRelation[0]
 	}
 
-	todo.Tags = &tags
+	// find many-to-many tag relation
+	if loadRelation {
+		tags, errFind := r.FindTodoTags(id)
+		if errFind != nil {
+			err = errFind
+			return
+		}
+
+		todo.Tags = &tags
+	}
+
 	return
 }
 
@@ -212,6 +221,17 @@ func (r *TodoRepo) MapTagsToTodo(todos *[]model.Todo) (err error) {
 	}
 
 	return
+}
+
+func (r *TodoRepo) UpdateStatus(todoID string, isDone bool) (err error) {
+	var todo model.Todo
+
+	err = r.db.Model(&todo).Where("id = ?", todoID).Updates(map[string]interface{}{"is_done": isDone}).Error
+	if err != nil {
+		return
+	}
+
+	return nil
 }
 
 func NewTodoRepo(db *gorm.DB) *TodoRepo {

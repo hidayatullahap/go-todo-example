@@ -111,3 +111,5 @@ CREATE INDEX `i_tag_todos_tag_id` ON `todo_tags` (`todo_id`);
 25. add updating todo-tag relationship
 26. edit detail todo function for search relation
 27. add list tags 
+28. refactor validator
+29. add update status todo

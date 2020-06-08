@@ -15,7 +15,7 @@ type TodoRepo struct {
 }
 
 func (r *TodoRepo) FindAll() (todos []model.Todo, err error) {
-	err = r.db.Find(&todos).Error
+	err = r.db.Order("created_at").Find(&todos).Error
 	if err != nil {
 		return
 	}
@@ -103,9 +103,8 @@ func (r *TodoRepo) Create(todo model.Todo) (err error) {
 // Using map for update nil/non-zero values, gorm will skip those values
 func (r *TodoRepo) Update(todoID string, todo model.Todo) (err error) {
 	updateField := map[string]interface{}{
-		"message":     todo.Message,
-		"note":        todo.Note,
-		"custom_date": todo.CustomDate}
+		"message": todo.Message,
+		"note":    todo.Note}
 
 	tx := r.db.Begin()
 	err = tx.Model(&todo).Where("id = ?", todoID).Updates(updateField).Error

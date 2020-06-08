@@ -6,7 +6,6 @@ import (
 	stdErr "errors"
 
 	"github.com/hidayatullahap/go-todo-example/action/request"
-	"github.com/hidayatullahap/go-todo-example/core"
 	"github.com/hidayatullahap/go-todo-example/core/errors"
 	"github.com/hidayatullahap/go-todo-example/model"
 	"github.com/labstack/echo/v4"
@@ -62,15 +61,6 @@ func (a *Todo) buildTodoModel(c echo.Context) (model.Todo, error) {
 
 	todo.Message = req.Message
 	todo.Note = req.Note
-
-	if req.CustomDate != nil {
-		customDate, err := core.FormatDate(*req.CustomDate)
-		if err != nil {
-			return todo, err
-		}
-
-		todo.CustomDate = &customDate
-	}
 
 	if req.Tags != nil {
 		tags := buildTodoTagsModel(req)

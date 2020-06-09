@@ -1,0 +1,175 @@
+{
+  "info": {
+    "_postman_id": "b7522d0e-80ab-4c87-8b45-2a075c38b46a",
+    "name": "Medium Todo",
+    "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
+  },
+  "item": [
+    {
+      "name": "Tag",
+      "item": [
+        {
+          "name": "List",
+          "_postman_id": "9eb9e51d-9b11-486b-91d3-940a0464c516",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}\/tags"
+          },
+          "response": []
+        },
+        {
+          "name": "Detail",
+          "_postman_id": "148394be-b6e6-44ba-ad61-dc731226d3e3",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}\/tags\/1"
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "_postman_id": "09048616-00c8-4f67-93c2-7e2e83df69b1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"New tag\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{host}}\/tags"
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "_postman_id": "afdeef17-d0e2-40c9-8e9b-a2c1f54dec4f",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"Edit New tag\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{host}}\/tags\/1"
+          },
+          "response": []
+        }
+      ],
+      "_postman_id": "46c899f3-1f56-4613-9b8a-b47bfb8ec4fe",
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Todo",
+      "item": [
+        {
+          "name": "List",
+          "_postman_id": "319d92d2-1050-4676-88be-f6162b546cb2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}\/todos"
+          },
+          "response": []
+        },
+        {
+          "name": "Detail",
+          "_postman_id": "4425995f-06b9-488e-8ac7-d8178f6371df",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}\/todos\/1"
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "_postman_id": "69c0be1c-c92a-4038-8c24-0ad79711c06e",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"message\": \"Todo with tag\",\n\t\"note\": \"This is additional note\",\n\t\"tags\": [1,2]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{host}}\/todos"
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "_postman_id": "fa00515c-246c-4694-91d2-345086fa0311",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"message\": \"Todo with tag\",\n\t\"note\": \"This is additional note\",\n\t\"tags\": [1,2]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{host}}\/todos\/1"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Status",
+          "_postman_id": "f94a0313-dd4c-4ee7-9035-5c39f504d805",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{host}}\/todos\/1?is_done=true",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "todos",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "is_done",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "_postman_id": "ef6114d6-a70b-47a8-a306-2c58a1066ce7",
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "Hello",
+      "_postman_id": "de43f5eb-b54f-457e-bcf3-3c132ab5dd52",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{host}}"
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

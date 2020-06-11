@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/hidayatullahap/go-todo-example/action"
 	"github.com/hidayatullahap/go-todo-example/core"
+	"github.com/hidayatullahap/go-todo-example/database"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -28,7 +30,6 @@ func main() {
 }
 
 func addMiddleware(e *echo.Echo) {
-	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 }
@@ -38,5 +39,13 @@ func addRoutes(e *echo.Echo, app core.App) {
 }
 
 func initApp() core.App {
-	return core.App{}
+	mysqlCon := database.GetMysqlConnection()
+	debugIsActive, _ := strconv.ParseBool(os.Getenv("db_debug"))
+	if debugIsActive {
+		mysqlCon.LogMode(true)
+	}
+
+	return core.App{
+		Db: mysqlCon,
+	}
 }
